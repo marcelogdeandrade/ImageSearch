@@ -8,6 +8,12 @@ O dataset consiste em aproxidamente 1000 imagens de 200 classes distintas.
 
 O dataset não é público, mas o projeto funciona com quaisquer imagens na pasta `images/`.
 
+## Técnicas Utilizadas
+
+Para a busca de imagens, usou-se uma rede neural pré-treinada, o `MobileNet`, para prever a probabilidade de cada imagem do dataset para cada classe descrita do [ImageNet](http://www.image-net.org/).
+
+Essas probabilidades são então guardaas no arquivo `probs.pickle`, e esse arquivo é utilizado no processo de busca.
+
 ## Requerimentos
 
 As dependências do projeto estão presentes no arquivo `requirements.txt`
