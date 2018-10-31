@@ -29,5 +29,15 @@ O termo deve ser uma classe válida do [ImageNet](http://www.image-net.org/).
 Exemplo:
 
 ```
-$ python busca_imagens.py --term radiator
+$ python busca_imagens.py --term monastery
+```
+
+As probabilidades calculadas das imagens do dataset são gravadas em um arquivo `probs.pickle`.
+
+Caso haja alguma mudança no dataset ou seja desejado recalcular as probabilidades, use a flag `--build-index`
+
+Exemplo:
+
+```
+$ python busca_imanges.py --term monastery --build-index
 ```

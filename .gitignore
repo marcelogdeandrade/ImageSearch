@@ -108,3 +108,6 @@ images/
 
 # Vscode
 .vscode/
+
+# Probs File
+*.pickle

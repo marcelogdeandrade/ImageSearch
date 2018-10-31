@@ -2,8 +2,12 @@ from keras.preprocessing import image
 from keras.applications.mobilenet import preprocess_input, decode_predictions
 import numpy as np
 import os
+import os.path
 import matplotlib.pyplot as plt
+import pickle
+import progressbar
 
+FILENAME = "probs.pickle"
 
 def term_to_id(term):
     result = {}
@@ -25,27 +29,47 @@ def mnetv2_input_from_image(img):
 
 def get_imgs_paths(dir_path):
     images = []
-    for root, directories, filenames in os.walk(dir_path):
+    for root, _, filenames in os.walk(dir_path):
         for filename in filenames: 
             images.append(os.path.join(root,filename))
     return images
 
-def get_imgs_probs(model, images, _id):
-    probs = []
-    for i in images:
-        img = image.load_img(i, target_size=(224, 224))
+def get_imgs_probs(model, images):
+    probs = {}
+    print("Calculando probabilidades das imagens:")
+    for i in progressbar.progressbar(range(len(images))):
+        img = image.load_img(images[i], target_size=(224, 224))
         proc_img = mnetv2_input_from_image(img)
         preds = model.predict(proc_img)
-        prob = preds[0][_id]
-        probs.append(prob)
+        prob = preds[0]
+        probs[images[i]] = prob
     return probs
 
-def get_top_probs(probs, num):
-    return np.array(probs).argsort()[-num:][::-1]
+def save_probs(probs):
+    with open(FILENAME, 'wb') as handle:
+        pickle.dump(probs, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-def show_imgs(images, idxs):
-    for i in idxs:
-        img = image.load_img(images[i])
+def open_probs():
+    with open(FILENAME, 'rb') as handle:
+        probs = pickle.load(handle)
+        return probs
+
+def get_probs_id(probs, _id):
+    probs_id = {}
+    for key, value in probs.items():
+        probs_id[key] = value[_id]
+    return probs_id
+
+def get_top_probs(probs, num):
+    return sorted(probs.items(), key=lambda kv: kv[1], reverse=True)[:num]
+
+def show_imgs(images, top_imgs):
+    for i in top_imgs:
+        print("Confiança da imagem {0}: {1:.2f}%".format(i[0], i[1]*100))
+        img = image.load_img(i[0])
         plt.imshow(img)
         plt.show()
+
+def check_file_exists():
+    return os.path.isfile(FILENAME) 
 
