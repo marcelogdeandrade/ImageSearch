@@ -85,3 +85,5 @@ Confiança: 0.36%
 Mesmo as imagens não sendo satisfatórias em relação ao termo, percebe-se que a confiança das mesmas é baixíssima, ou seja, o problema é a falta de imagens no dataset, e não o algoritmo em si.
 
 Um resultado melhor para a maioria dos termos possíveis pode ser alcançado com um dataset de imagens maior e mais diverso.
+
+Uma segunda opção é trocar a rede neural pré-treinada por outra com melhor desempenho.
